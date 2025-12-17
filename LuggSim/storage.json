@@ -1,0 +1,399 @@
+{
+  "lockers": [
+    {
+      "id": 1,
+      "number": 1,
+      "size": "Small",
+      "status": "reserved",
+      "code": "123454",
+      "reserved_at": "2025-12-17T15:18:07.573028",
+      "expires_at": "2025-12-18T15:18:07.573028",
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 2,
+      "number": 2,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 3,
+      "number": 3,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 4,
+      "number": 4,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 5,
+      "number": 5,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 6,
+      "number": 6,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 7,
+      "number": 7,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 8,
+      "number": 8,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 9,
+      "number": 9,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 10,
+      "number": 10,
+      "size": "Small",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 11,
+      "number": 11,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 12,
+      "number": 12,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 13,
+      "number": 13,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 14,
+      "number": 14,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 15,
+      "number": 15,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 16,
+      "number": 16,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 17,
+      "number": 17,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 18,
+      "number": 18,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 19,
+      "number": 19,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 20,
+      "number": 20,
+      "size": "Medium",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 21,
+      "number": 21,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 22,
+      "number": 22,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 23,
+      "number": 23,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 24,
+      "number": 24,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 25,
+      "number": 25,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 26,
+      "number": 26,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 27,
+      "number": 27,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 28,
+      "number": 28,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 29,
+      "number": 29,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    },
+    {
+      "id": 30,
+      "number": 30,
+      "size": "Large",
+      "status": "available",
+      "code": null,
+      "reserved_at": null,
+      "expires_at": null,
+      "payment_method": null,
+      "payment_status": "unpaid"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "f34db5f49bde4e65",
+      "locker_number": 11,
+      "action": "store",
+      "code": "455553",
+      "timestamp": "2025-12-17T14:59:56.534619",
+      "size": "Medium"
+    },
+    {
+      "id": "756fbad23a6b63bf",
+      "locker_number": 11,
+      "action": "payment",
+      "code": "455553",
+      "timestamp": "2025-12-17T15:00:23.059383",
+      "payment_method": "cash",
+      "payment_amount": 5
+    },
+    {
+      "id": "87218e17f5297996",
+      "locker_number": 11,
+      "action": "retrieve",
+      "timestamp": "2025-12-17T15:00:28.092668"
+    },
+    {
+      "id": "77ebb208b6fae704",
+      "locker_number": 1,
+      "action": "store",
+      "code": "123456",
+      "timestamp": "2025-12-17T15:00:41.059922",
+      "size": "Small"
+    },
+    {
+      "id": "95435b60270d4e95",
+      "locker_number": 1,
+      "action": "payment",
+      "code": "123456",
+      "timestamp": "2025-12-17T15:00:56.205490",
+      "payment_method": "cash",
+      "payment_amount": 3
+    },
+    {
+      "id": "e487c8bec9a5350d",
+      "locker_number": 1,
+      "action": "retrieve",
+      "timestamp": "2025-12-17T15:00:58.684761"
+    },
+    {
+      "id": "9bbe3683bb85fae6",
+      "locker_number": 1,
+      "action": "store",
+      "code": "123454",
+      "timestamp": "2025-12-17T15:18:07.573028",
+      "size": "Small"
+    }
+  ],
+  "settings": {
+    "total_lockers": 30,
+    "prices": {
+      "Small": 3,
+      "Medium": 5,
+      "Large": 8
+    },
+    "max_hours": 24
+  }
+}

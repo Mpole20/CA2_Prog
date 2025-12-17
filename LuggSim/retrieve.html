@@ -1,13 +1,190 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <title>Retrieve</title>
-    </body>
-    <p>in retrieve the user will be asked to enter his code and upon entering he will be asked to pay the amount that 
-        is need for however long his stuff was stored, after paying the door opens and in the database the code is cleard and the 
-        locker is deemed "free to use" again.
-    </p>
-    <a href = "index.html">
-            <button>Return</button>
-        </a>
+<head>
+    <title>Retrieve Items</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .payment-container { max-width: 400px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .payment-option { display: flex; align-items: center; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; }
+        .payment-option:hover { border-color: darkgreen; background: #f9f9f9; }
+        .payment-option.selected { border-color: darkgreen; background: #e8f5e8; }
+        .payment-icon { font-size: 24px; margin-right: 15px; width: 40px; text-align: center; }
+        .payment-details { flex: 1; }
+        .payment-title { font-weight: bold; margin-bottom: 5px; }
+        .success-message { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center; }
+        .status-indicator { padding: 10px; border-radius: 5px; margin: 10px 0; text-align: center; font-weight: bold; }
+        .status-paid { background: #d4edda; color: #155724; }
+        .status-open { background: #fff3cd; color: #856404; }
+        .timer { font-size: 24px; font-weight: bold; text-align: center; color: darkgreen; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h2 class="title">Retrieve Items</h2>
+    <div class="description"><p>Enter your 6-digit code to retrieve items. Payment required before opening.</p></div>
+    
+    <div class="payment-container">
+        <h3 style="text-align: center; margin-bottom: 20px;">Enter 6-Digit Code</h3>
+        <input type="text" id="codeInput" class="code-input" maxlength="6" placeholder="123456" oninput="validateCode(this)" style="width: 250px;">
+        <p id="errorMsg"></p>
+        <div style="text-align: center;"><button class="submit-btn" onclick="verifyCode()" id="verifyBtn">Verify</button></div>
+    </div>
+    
+    <div id="paymentSection" style="display: none;">
+        <div class="payment-container">
+            <h3 style="text-align: center; margin-bottom: 20px;">Select Payment</h3>
+            <div id="paymentOptions">
+                <div class="payment-option" onclick="selectPayment('cash')" id="cashOption">
+                    <div class="payment-icon">💰</div><div class="payment-details"><div class="payment-title">Cash</div><div>Pay with cash</div></div>
+                </div>
+                <div class="payment-option" onclick="selectPayment('card')" id="cardOption">
+                    <div class="payment-icon">💳</div><div class="payment-details"><div class="payment-title">Card (Tap)</div><div>Tap card to pay</div></div>
+                </div>
+            </div>
+            <div id="cardTapSection" style="display: none; text-align: center; margin: 30px 0;">
+                <div style="font-size: 32px; margin: 10px;">📱</div><p>Tap card now...</p><div id="tapStatus" class="status-indicator">Waiting...</div>
+            </div>
+            <div id="cashSection" style="display: none; text-align: center; margin: 30px 0;">
+                <div style="font-size: 32px; margin: 20px;">💰</div><p>Insert cash</p><div id="cashStatus" class="status-indicator">Waiting...</div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="submit-btn" onclick="processPayment()" id="payBtn" style="display: none;">Pay</button>
+                <button class="cancel-btn" onclick="cancelRetrieval()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="lockerSection" style="display: none;">
+        <div class="payment-container">
+            <div class="success-message">✅ Payment Successful! Opening locker...</div>
+            <div id="lockerStatus" class="status-open">Locker #<span id="lockerNum">12</span> OPEN</div>
+            <div class="timer" id="timer">05:00</div>
+            <p style="text-align: center;">Auto-closes in: <span id="timeLabel">5 minutes</span></p>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="submit-btn" onclick="completeRetrieval()">Retrieved Items</button>
+                <button class="cancel-btn" onclick="closeLockerEarly()">Close Now</button>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;"><a href="/"><button class="return-btn">← Main Menu</button></a></div>
+
+    <script>
+        let code = "", paymentMethod = "", lockerNum = null, timerInterval;
+        
+        function validateCode(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (input.value.length > 6) input.value = input.value.slice(0, 6);
+        }
+        
+        async function verifyCode() {
+            const input = document.getElementById("codeInput").value;
+            const error = document.getElementById("errorMsg");
+            
+            if (input.length !== 6 || !/^\d{6}$/.test(input)) {
+                error.textContent = "Enter 6 digits";
+                return;
+            }
+            
+            try {
+                const res = await fetch('/api/verify', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ code: input })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    code = input;
+                    lockerNum = data.locker_number;
+                    error.textContent = "✓ Verified";
+                    error.style.color = "green";
+                    
+                    setTimeout(() => {
+                        document.getElementById("paymentSection").style.display = "block";
+                        document.getElementById("verifyBtn").style.display = "none";
+                        document.getElementById("codeInput").disabled = true;
+                    }, 500);
+                } else {
+                    error.textContent = data.error;
+                }
+            } catch {
+                error.textContent = "Server error";
+            }
+        }
+        
+        function selectPayment(method) {
+            paymentMethod = method;
+            document.getElementById("cashOption").classList.toggle("selected", method === 'cash');
+            document.getElementById("cardOption").classList.toggle("selected", method === 'card');
+            document.getElementById("cashSection").style.display = method === 'cash' ? 'block' : 'none';
+            document.getElementById("cardTapSection").style.display = method === 'card' ? 'block' : 'none';
+            document.getElementById("payBtn").style.display = 'inline-block';
+        }
+        
+        async function processPayment() {
+            if (!paymentMethod) {
+                alert("Select payment method");
+                return;
+            }
+            
+            try {
+                const res = await fetch('/api/pay', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ code: code, payment_method: paymentMethod })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById("paymentSection").style.display = "none";
+                    document.getElementById("lockerSection").style.display = "block";
+                    document.getElementById("lockerNum").textContent = lockerNum;
+                    
+                    // Start 5-min timer
+                    let time = 300;
+                    const timer = document.getElementById("timer");
+                    timerInterval = setInterval(() => {
+                        time--;
+                        const m = Math.floor(time / 60);
+                        const s = time % 60;
+                        timer.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                        document.getElementById("timeLabel").textContent = `${m} min${m !== 1 ? 's' : ''}`;
+                        if (time <= 0) {
+                            clearInterval(timerInterval);
+                            alert("⏰ Time expired!");
+                            completeRetrieval();
+                        }
+                    }, 1000);
+                } else {
+                    alert(data.error);
+                }
+            } catch {
+                alert("Payment failed");
+            }
+        }
+        
+        async function completeRetrieval() {
+            clearInterval(timerInterval);
+            try {
+                await fetch('/api/open', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ locker_number: lockerNum })
+                });
+                alert("✅ Locker available!");
+                window.location.href = "/";
+            } catch {
+                alert("Error");
+            }
+        }
+        
+        function closeLockerEarly() {
+            if (confirm("Close locker now?")) completeRetrieval();
+        }
+        
+        function cancelRetrieval() {
+            if (confirm("Cancel?")) window.location.href = "/retrieve.html";
+        }
+    </script>
+</body>
 </html>

@@ -1,21 +1,104 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <title>Luggage Storage</title>
-    </head>
-    <body style ="font-size: 40px;">Welcome to Luggage storage</body>
+<head>
+    <title>Luggage Storage</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; }
+        .welcome { font-size: 40px; text-align: center; color: darkgreen; margin: 30px 0; }
+        .options-container { display: flex; justify-content: center; gap: 40px; margin: 50px 0; }
+        .option-button {
+            width: 250px; height: 120px; background: darkgreen; color: white; border: none;
+            border-radius: 15px; font-size: 24px; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s; box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            text-decoration: none; display: flex; justify-content: center; align-items: center;
+        }
+        .option-button:hover { transform: scale(1.05); background: #006400; }
+        .subtitle { text-align: center; margin: 20px 0; color: #333; font-size: 22px; }
+        .status-container { background: #f5f5f5; padding: 25px; border-radius: 10px; margin: 40px 0; border: 2px solid #ddd; }
+        .status-title { color: darkgreen; margin-bottom: 15px; font-size: 24px; }
+        .locker-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin: 20px 0; }
+        .locker-box {
+            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+            border-radius: 5px; font-weight: bold; font-size: 14px; cursor: pointer;
+            transition: transform 0.2s; color: white;
+        }
+        .locker-box:hover { transform: scale(1.1); }
+        .locker-available { background: #4CAF50; }
+        .locker-occupied { background: #f44336; }
+        .locker-reserved { background: #ff9800; }
+        .stats { display: flex; justify-content: space-around; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; }
+        .stat-box { text-align: center; padding: 10px; }
+        .stat-number { font-size: 32px; font-weight: bold; color: darkgreen; }
+        .stat-label { font-size: 14px; color: #666; }
+        .price-info { text-align: center; margin-top: 10px; color: #666; }
+        hr { border: none; height: 2px; background: #ddd; margin: 30px 0; }
+        .last-updated { text-align: center; font-size: 12px; color: #888; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="welcome">Welcome to Luggage Storage</div>
     <hr>
-    <h4>Please choose an option</h4>
-    <a href = "store.html">
-        <button style = "height: 100px; background-color: darkgreen; color: aliceblue;" >Store Luggage</button>
-
-    </a>
-    <a href = "retrieve.html">
-        <button style = "height: 100px; background-color: darkgreen; color: aliceblue;">Retrieve Luggage</button>
-    </a>
-    <hr>    
-    <br>
-    <button>Admin</button>
-
+    <h3 class="subtitle">Please choose an option</h3>
+    <div class="options-container">
+        <a href="store.html" class="option-button">Store Luggage</a>
+        <a href="retrieve.html" class="option-button">Retrieve Luggage</a>
+    </div>
+    <hr>
+    <div class="status-container">
+        <h3 class="status-title">Locker System Status</h3>
+        <div class="locker-grid" id="lockerGrid"></div>
+        <div class="last-updated">Last updated: <span id="updateTime">Loading...</span></div>
+        <div class="stats">
+            <div class="stat-box"><div class="stat-number" id="availableCount">0</div><div class="stat-label">Available</div></div>
+            <div class="stat-box"><div class="stat-number" id="occupiedCount">0</div><div class="stat-label">Occupied</div></div>
+            <div class="stat-box"><div class="stat-number" id="totalCount">30</div><div class="stat-label">Total</div></div>
+            <div class="stat-box"><div class="stat-number" id="smallCount">0</div><div class="stat-label">Small</div></div>
+            <div class="stat-box"><div class="stat-number" id="mediumCount">0</div><div class="stat-label">Medium</div></div>
+            <div class="stat-box"><div class="stat-number" id="largeCount">0</div><div class="stat-label">Large</div></div>
+        </div>
+        <div class="price-info" id="priceInfo"></div>
+    </div>
+    
+    <script>
+        async function loadStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                if (data.success) {
+                    updateLockerGrid(data.lockers);
+                    updateStats(data.statistics);
+                    document.getElementById('updateTime').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                }
+            } catch(e) {
+                document.getElementById('lockerGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#666">Cannot connect to server</div>';
+            }
+        }
+        
+        function updateLockerGrid(lockers) {
+            const grid = document.getElementById('lockerGrid');
+            grid.innerHTML = '';
+            lockers.sort((a,b) => a.number - b.number).forEach(l => {
+                const box = document.createElement('div');
+                box.className = 'locker-box';
+                box.textContent = l.number;
+                box.classList.add('locker-' + (l.status === 'available' ? 'available' : l.status === 'occupied' ? 'occupied' : 'reserved'));
+                box.title = `Locker #${l.number}\nSize: ${l.size}\nStatus: ${l.status}${l.code ? `\nCode: ${l.code}` : ''}`;
+                grid.appendChild(box);
+            });
+        }
+        
+        function updateStats(stats) {
+            document.getElementById('availableCount').textContent = stats.available;
+            document.getElementById('occupiedCount').textContent = stats.occupied;
+            document.getElementById('smallCount').textContent = stats.small_available;
+            document.getElementById('mediumCount').textContent = stats.medium_available;
+            document.getElementById('largeCount').textContent = stats.large_available;
+            document.getElementById('priceInfo').innerHTML = `Prices: Small - €${stats.prices.Small} | Medium - €${stats.prices.Medium} | Large - €${stats.prices.Large}`;
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadStatus);
+        setInterval(loadStatus, 10000);
+    </script>
+</body>
 </html>

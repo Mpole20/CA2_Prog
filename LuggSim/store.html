@@ -1,16 +1,116 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Storage</title>
-    </head>
-    <body>
-        <p>this is the storage selection here the useer will have the option to choose between 3 types
-            of locker sizes after choosing and inputing a 6 digit code, the locker will open and the user will place his stuff there,
-            then a timer will start and when the user goes to retrieve that will be checked.
-        </p>
-        <a href = "index.html">
-            <button>Return</button>
-        </a>
-    </body>
+<head>
+    <title>Storage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2 class="title">Storage Locker System</h2>
+    
+    <div class="description">
+        <p>Choose a locker size and enter a 6-digit code to reserve a locker.</p>
+    </div>
+    
+    <h3 class="instruction">Choose locker size</h3>
+    
+    <div class="locker-container">
+        <button class="locker-btn" onclick="openCodeModal('Small')">
+            <div class="size-label">S</div>
+            <div class="size-desc">Small</div>
+        </button>
+        
+        <button class="locker-btn" onclick="openCodeModal('Medium')">
+            <div class="size-label">M</div>
+            <div class="size-desc">Medium</div>
+        </button>
+        
+        <button class="locker-btn" onclick="openCodeModal('Large')">
+            <div class="size-label">L</div>
+            <div class="size-desc">Large</div>
+        </button>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/"><button class="return-btn">← Main Menu</button></a>
+    </div>
 
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <h3>Enter 6-digit code for <span id="lockerSize">Small</span></h3>
+            <input type="text" id="codeInput" class="code-input" maxlength="6" placeholder="123456" oninput="validateCode(this)">
+            <p id="errorMsg"></p>
+            <div>
+                <button class="submit-btn" onclick="submitCode()" id="submitBtn">Confirm</button>
+                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedLockerSize = "";
+        
+        function openCodeModal(size) {
+            selectedLockerSize = size;
+            document.getElementById("lockerSize").textContent = size;
+            document.getElementById("codeModal").style.display = "block";
+            document.getElementById("errorMsg").textContent = "";
+            document.getElementById("codeInput").value = "";
+            setTimeout(() => document.getElementById("codeInput").focus(), 100);
+        }
+        
+        function closeModal() {
+            document.getElementById("codeModal").style.display = "none";
+        }
+        
+        function validateCode(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (input.value.length > 6) input.value = input.value.slice(0, 6);
+        }
+        
+        async function submitCode() {
+            const code = document.getElementById("codeInput").value;
+            const btn = document.getElementById("submitBtn");
+            const error = document.getElementById("errorMsg");
+            
+            if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+                error.textContent = "Enter 6 digits";
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = "Processing...";
+            
+            try {
+                const res = await fetch('/api/reserve', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ size: selectedLockerSize, code: code })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert(`✅ ${selectedLockerSize} locker #${data.locker_number} reserved!\nCode: ${code}`);
+                    setTimeout(() => window.location.href = "/", 800);
+                } else {
+                    error.textContent = data.error;
+                    btn.disabled = false;
+                    btn.textContent = "Confirm";
+                }
+            } catch {
+                error.textContent = "Server error";
+                btn.disabled = false;
+                btn.textContent = "Confirm";
+            }
+        }
+        
+        window.onclick = e => {
+            if (e.target.id === "codeModal") closeModal();
+        }
+        
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Enter' && document.getElementById("codeModal").style.display === "block") submitCode();
+        });
+    </script>
+</body>
 </html>
